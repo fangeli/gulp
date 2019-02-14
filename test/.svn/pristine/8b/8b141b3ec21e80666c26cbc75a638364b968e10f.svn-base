@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+  
+
+
+  <create>
+
+<!--
+    insert into rules_engine.unit
+    (idUnit, idDisp, idRule, timestamp)
+    select id_mezzo , id_disp, (select id from rules_engine.rule rule
+    where id = #idRule# and idUser = #idUser# and rule.deleted = 0) , now() from pod.anag_mezzi_disp
+    where id_mezzo in (#idUnits#)
+    ;
+-->
+    insert into rules_engine.unit
+    (idUnit, idDisp, idRule, timestamp)
+    select id id_mezzo , ifnull(id_disp,-1) id_disp, (select id from rules_engine.rule rule
+    where id = #idRule# and idUser = #idUser# and rule.deleted = 0) , now() from pod.anag_mezzi a
+    left  join pod.anag_mezzi_disp d on a.id = d.id_mezzo
+    where id in (#idUnits#)
+    ;
+
+  </create>
+   
+  <update>
+
+    <update>
+      update rules_engine.unit
+      SET idUnit = IF(Isnull(#idUnit#), idUnit, #idUnit#),
+      idRule = IF(Isnull(#idRule#), idRule, #idRule#),
+      idDisp = IF(Isnull(#idUnit#), idDisp, (select id_disp from pod.anag_mezzi_disp
+      where id_mezzo in (#idUnit#) limit 1))
+      where 1 = 1
+      and idRule in (select rule.id from rules_engine.rule where rule.idUser = 1 and rule.deleted = 0)
+    </update>
+    <whereId>
+      and id = #id#
+    </whereId>
+
+  </update>
+   
+  
+  <delete>
+    
+    delete from rules_engine.unit
+    where idRule = #idRule#
+    and idRule in (select rule.id from rules_engine.rule where rule.idUser = #idUser# and rule.deleted = 0)
+    
+  </delete>
+
+ 
+
+
+
+</queries>

@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+
+  <create>
+
+    insert into rules_engine.`interval`
+    (idRule, timeValidity, timestamp)
+    values ((select id from rules_engine.rule rule
+    where id = #idRule# and idUser = #idUser# and rule.deleted = 0), #timeValidity#, now())
+
+  </create>
+ 
+  <update>
+
+    update rules_engine.`interval`
+    set timeValidity = if(isnull(#timeValidity#), timeValidity ,#timeValidity#),
+    timestamp = now()
+    where idRule = #idRule#
+    and idRule in (select rule.id from rules_engine.rule where rule.idUser = #idUser# and rule.deleted = 0)
+
+
+  </update>
+ 
+
+    <timeValiditySchema>
+
+    <!-- questo schema è stato creato qui:     https://www.jsonschema.net     -->
+    
+   {
+    "definitions": {
+    
+    },
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "required": [
+      "keyValues",
+      "key",
+      "year",
+      "week",
+      "days"
+    ],
+    "properties": {
+      "keyValues": {
+        "$id": "#/properties/keyValues",
+        "type": "string",
+        "title": "The Keyvalues Schema",
+        "default": "",
+        "examples": [
+          "year/week/days/always"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "key": {
+        "$id": "#/properties/key",
+        "type": "string",
+        "title": "The Key Schema",
+        "default": "",
+        "examples": [
+          "days"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "year": {
+        "$id": "#/properties/year",
+        "type": "object",
+        "title": "The Year Schema",
+        "required": [
+          "fromTo"
+        ],
+        "properties": {
+          "fromTo": {
+            "$id": "#/properties/year/properties/fromTo",
+            "type": "array",
+            "title": "The Fromto Schema",
+            "items": {
+              "$id": "#/properties/year/properties/fromTo/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "from",
+                "to"
+              ],
+              "properties": {
+                "from": {
+                  "$id": "#/properties/year/properties/fromTo/items/properties/from",
+                  "type": "string",
+                  "title": "The From Schema",
+                  "default": "",
+                  "examples": [
+                    "2018-11-21 06:12:50"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "to": {
+                  "$id": "#/properties/year/properties/fromTo/items/properties/to",
+                  "type": "string",
+                  "title": "The To Schema",
+                  "default": "",
+                  "examples": [
+                    "2018-11-22 06:12:50"
+                  ],
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "week": {
+        "$id": "#/properties/week",
+        "type": "array",
+        "title": "The Week Schema",
+        "items": {
+          "$id": "#/properties/week/items",
+          "type": "object",
+          "title": "The Items Schema",
+          "required": [
+            "id",
+            "day",
+            "fromTo"
+          ],
+          "properties": {
+            "id": {
+              "$id": "#/properties/week/items/properties/id",
+              "type": "integer",
+              "title": "The Id Schema",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "day": {
+              "$id": "#/properties/week/items/properties/day",
+              "type": "string",
+              "title": "The Day Schema",
+              "default": "",
+              "examples": [
+                "monday"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fromTo": {
+              "$id": "#/properties/week/items/properties/fromTo",
+              "type": "array",
+              "title": "The Fromto Schema",
+              "items": {
+                "$id": "#/properties/week/items/properties/fromTo/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "properties": {
+                  "from": {
+                    "$id": "#/properties/week/items/properties/fromTo/items/properties/from",
+                    "type": "string",
+                    "title": "The From Schema",
+                    "default": "",
+                    "examples": [
+                      "09:00:00"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "to": {
+                    "$id": "#/properties/week/items/properties/fromTo/items/properties/to",
+                    "type": "string",
+                    "title": "The To Schema",
+                    "default": "",
+                    "examples": [
+                      "13:00:00"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "days": {
+        "$id": "#/properties/days",
+        "type": "string",
+        "title": "The Days Schema",
+        "default": "",
+        "examples": [
+          "1,2,3,4,5"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+
+
+
+  </timeValiditySchema>
+  
+  
+</queries>

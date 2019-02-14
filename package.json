@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-util": "latest",
+    "gulp-sass": "latest",
+    "gulp-coffee": "latest",
+    "gulp-uglify": "latest",
+    "gulp-concat": "latest",
+    "gulp-connect": "latest",
+    "gulp-scp2": "latest",
+    "node-svn-ultimate": "latest",
+    "gulp-ssh": "latest",
+    "node-ssh": "latest",
+    "gulp-typescript": "latest",
+    "typescript": "latest",
+    "gulp-run": "latest"
+  }
+}

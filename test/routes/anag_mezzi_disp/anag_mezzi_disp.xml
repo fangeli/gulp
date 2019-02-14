@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+  <select>
+
+    select * from pod.anag_mezzi_disp
+    where id_mezzo in ( #idUnit# );
+    
+  </select>
+ 
+</queries>

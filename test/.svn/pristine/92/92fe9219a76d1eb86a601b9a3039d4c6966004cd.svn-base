@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+ 
+  <read>
+
+    <read>
+      select * from rules_engine.alldata
+      where alldata.idUser = #idUser#
+    </read>
+    <whereIdRule>
+      and alldata.idRule = #idRule#
+    </whereIdRule>
+
+  </read>
+ 
+
+</queries>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+
+  <create>
+    insert into rules_engine.history
+    (idRule, idUser, action, property, timestamp)
+    values
+    ((select id from rules_engine.rule where id = #idRule# and idUser = #idUser# and rule.deleted = 0), #idUser#, #action#, #property#, now())
+    ;
+
+  </create>
+   
+ 
+
+</queries>

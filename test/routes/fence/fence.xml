@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+  <read>
+    <select>
+      SELECT `fence`.`id`,
+      `fence`.`name`,
+      `fence`.`description`,
+      `fence`.`type`,
+      `fence`.`iduser`,
+      `fence`.`idcompany`
+      FROM `rules_engine`.`fence`
+      where idUser = #idUser#
+    </select>
+    <whereId>
+    and id in (#ids#)
+  </whereId>
+
+
+
+</read>
+ 
+
+
+</queries>

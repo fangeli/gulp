@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+  <create>
+
+    insert into rules_engine.event
+    (idRuleUnit, geodata, event.read, time)
+    values ((
+    select unit.id from rules_engine.unit
+    join rules_engine.rule
+    on unit.idRule = rule.id
+    where rule.idUser = #idUser#
+    and unit.id = #idRuleUnit#
+    ),
+    #geodata#, #read#, now())
+
+  </create>
+  
+  <read>
+
+    SELECT   *
+    FROM     rules_engine.event event
+    JOIN     rules_engine.unit unit
+    ON       event.idRuleUnit = unit.id
+    JOIN     rules_engine.rule rule
+    ON       rule.id = unit.idRule
+    WHERE    Timestampdiff(second, time, Now()) <![CDATA[ <= ]]> 7 * 24 * 60 *60 
+    AND      rule.idUser = #idUser# 
+    ORDER BY TIME DESC 
+    LIMIT 100
+
+  </read>
+
+
+
+  <markAsRead>
+
+    UPDATE rules_engine.event
+    SET    event.read = 1
+    WHERE  id IN ( #id# )
+    AND idRuleUnit IN (SELECT unit.id
+    FROM   rules_engine.unit
+    JOIN rules_engine.rule
+    ON unit.idRule = rule.id
+    WHERE  rule.idUser = #idUser#)
+
+  </markAsRead>
+
+
+</queries>

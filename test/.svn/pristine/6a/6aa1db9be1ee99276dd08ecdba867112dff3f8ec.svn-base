@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+
+  <create>
+
+    insert into rules_engine.notification
+    (idRule, system, emails, timestamp)
+    values ((select id from rules_engine.rule rule
+    where id = #idRule# and idUser = #idUser# and rule.deleted = 0), #system#, #emails#, now())
+
+  </create>
+
+ 
+  <update>
+
+    update rules_engine.notification
+    set system = IF(Isnull(#system#), system, #system#),
+    emails = #emails#
+    where idRule in (select idRule from rules_engine.rule where idUser = #idUser# and rule.deleted = 0)
+    and idRule = #idRule#
+
+  </update>
+  
+  
+</queries>

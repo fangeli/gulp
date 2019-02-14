@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<queries>
+
+
+
+  <read>
+
+    <read>
+      SELECT rule.*, GROUP_CONCAT(unit.idUnit) idUnits, `interval`.timeValidity, notification.system, notification.emails
+      FROM rules_engine.rule
+      LEFT JOIN rules_engine.unit ON rule.id = unit.idRule
+      LEFT JOIN rules_engine.`interval` ON rule.id = `interval`.idRule
+      LEFT JOIN rules_engine.notification  ON rule.id = notification.idRule
+      where   `rule`.`deleted` = 0
+      and rule.idUser = #idUser#
+    </read>
+    <whereIdRule>
+      and rule.id = #idRule#
+    </whereIdRule>
+    <groupBy>
+      GROUP BY rule.id
+    </groupBy>
+
+  </read>
+  
+  
+  <create>
+
+    insert into rules_engine.rule
+    (expression, idUser, idCompany, enabled, name, description, type, priority, status, timestamp)
+    values (#expression#, #idUser#, #idCompany#, #enabled#, #name#, #description#, #type#, #priority#, #status#, now())
+
+  </create>
+
+  <select>
+
+    SELECT rule.*, `interval`.timeValidity  FROM rules_engine.rule rule
+    left join
+    rules_engine.`interval` `interval`
+    on rule.id = `interval`.idRule
+    where  1 = 1
+    and rule.id = #idRule#
+    and rule.idUser = #idUser#
+    and rule.deleted = 0
+
+  </select>
+
+
+    <update>
+
+      UPDATE rules_engine.rule
+      SET    expression = IF(Isnull(#expression#), expression, #expression#),
+      idUser = IF(Isnull(#idUser#), idUser, #idUser#),
+      idCompany = IF(Isnull(#idCompany#), idCompany, #idCompany#),
+      enabled = IF(Isnull(#enabled#), enabled, #enabled#),
+      name = IF(Isnull(#name#), name, #name#),
+      description = IF(Isnull(#description#), description, #description#),
+      #logicalOperator#),
+      type = IF(Isnull(#type#), type, #type#),
+      priority = IF(Isnull(#priority#), priority, #priority#),
+      status = IF(Isnull(#status#), status, #status#)
+      WHERE  rule.id = #idRule#
+      AND rule.idUser = #idUser#
+      and rule.deleted = 0
+
+    </update>
+
+  <update2>
+
+    UPDATE rules_engine.rule
+    SET enabled = IF(Isnull(#enabled#), enabled, #enabled#)
+    WHERE  rule.id = #idRule#
+    AND rule.idUser = #idUser#
+    and rule.deleted = 0
+
+  </update2>
+
+
+  <delete>
+
+    UPDATE rules_engine.rule
+    SET deleted = 1
+    WHERE  id = #idRule#
+    AND idUser = #idUser#
+
+  </delete>
+   
+
+
+</queries>
